@@ -33,10 +33,10 @@ def init_model(model_name, checkpoint=None):
     return model
 
 
-def verification(model_name,  wav1, wav2, use_gpu=True, checkpoint=None):
+def verification(model_name,  wav1, wav2, use_gpu=True, checkpoint=None, wav1_start_sr=0, wav2_start_sr=0, wav1_end_sr=None, wav2_end_sr=None, model=None):
 
     assert model_name in MODEL_LIST, 'The model_name should be in {}'.format(MODEL_LIST)
-    model = init_model(model_name, checkpoint)
+    model = init_model(model_name, checkpoint) if model is None else model
 
     wav1, sr1 = sf.read(wav1)
     wav2, sr2 = sf.read(wav2)
@@ -47,6 +47,9 @@ def verification(model_name,  wav1, wav2, use_gpu=True, checkpoint=None):
     resample2 = Resample(orig_freq=sr2, new_freq=16000)
     wav1 = resample1(wav1)
     wav2 = resample2(wav2)
+    wav1 = wav1[...,wav1_start_sr:wav1_end_sr if wav1_end_sr is not None else wav1.shape[-1]]
+    wav2 = wav2[...,wav2_start_sr:wav2_end_sr if wav2_end_sr is not None else wav2.shape[-1]]
+    print(f'wav1 sr: {wav1.shape}, wav2 sr: {wav2.shape}')
 
     if use_gpu:
         model = model.cuda()
@@ -60,6 +63,7 @@ def verification(model_name,  wav1, wav2, use_gpu=True, checkpoint=None):
 
     sim = F.cosine_similarity(emb1, emb2)
     print("The similarity score between two audios is {:.4f} (-1.0, 1.0).".format(sim[0].item()))
+    return sim, model
 
 
 if __name__ == "__main__":
