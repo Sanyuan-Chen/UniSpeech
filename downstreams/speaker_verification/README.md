@@ -46,11 +46,26 @@ python verification.py --model_name ecapa_tdnn --wav1 vox1_data/David_Faustino/h
 python verification.py --model_name ecapa_tdnn --wav1 vox1_data/David_Faustino/hn8GyCJIfLM_0000012.wav --wav2 vox1_data/David_Faustino/xTOk1Jz-F_g_0000015.wav --checkpoint --checkpoint $checkpoint_path
 # output: he similarity score between two audios is 0.5302 (-1.0, 1.0).
 ```
+
+#### Example 2
+
 ```bash
 git clone https://github.com/Sanyuan-Chen/UniSpeech.git -b t-schen/asv_eval
 cd UniSpeech/downstreams/speaker_verification 
 pip install scipy==1.7.1 fire==0.4.0 sklearn==0.0 s3prl==0.3.1 torchaudio==0.9.0 sentencepiece==0.1.96 
 pip install s3prl@git+https://github.com/s3prl/s3prl.git@7ab62aaf2606d83da6c71ee74e7d16e0979edbc3#egg=s3prl 
-wget "https://msranlcmtteamdrive.blob.core.windows.net/share/wavlm/sv_finetuned/wavlm_large_finetune.pth?sv=2020-08-04&st=2022-12-02T09%3A48%3A45Z&se=2024-12-03T09%3A48%3A00Z&sr=b&sp=r&sig=jQPnEO9I5JqtoWylCvHIU0IvUxZ8jzC%2F64%2B6%2Fa1%2FKE4%3D" -O wavlm_large_finetune.pth 
-python verification.py --model_name wavlm_large --checkpoint wavlm_large_finetune.pth --wav1 wav1 --wav2 wav2 --wav1_start_sr 0 --wav1_end_sr 42666 --wav2_start_sr 42667
+wget "https://msranlcmtteamdrive.blob.core.windows.net/share/wavlm/sv_finetuned/wavlm_large_finetune.pth?sv=2020-08-04&st=2022-12-02T09%3A48%3A45Z&se=2024-12-03T09%3A48%3A00Z&sr=b&sp=r&sig=jQPnEO9I5JqtoWylCvHIU0IvUxZ8jzC%2F64%2B6%2Fa1%2FKE4%3D" -O wavlm_large_finetune.pth
+ 
+python verification_tsv.py $tsv1 $tsv2 --model_name wavlm_large --checkpoint wavlm_large_finetune.pth --scores $score_file --wav1_start_sr 0 --wav2_start_sr 0 --wav1_end_sr -1 --wav2_end_sr -1
+
+```
+
+If an error in hubconf.py raised, replace the file with utils/hubconf.py
+
+tsv file example
+```bash
+root_path
+wav1
+wav2
+...
 ```
