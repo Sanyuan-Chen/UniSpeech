@@ -30,10 +30,17 @@ scores_w = open(args.scores, 'w')
 assert len(tsv1) == len(tsv2)
 
 model = None
+score_list = []
 for t1, t2 in tqdm.tqdm(zip(tsv1, tsv2), total=len(tsv1)):
     t1_name = t1.split()[0]
     t2_name = t2.split()[0]
-    sim, model = verification(args.model_name,  tsv1_root+'/'+t1_name, tsv2_root+'/'+t2_name, use_gpu=True, checkpoint=args.checkpoint, wav1_start_sr=args.wav1_start_sr, wav2_start_sr=args.wav2_start_sr, wav1_end_sr=args.wav1_end_sr, wav2_end_sr=args.wav2_end_sr, model=model)
-    scores_w.write(f'{t1_name}|{t2_name}\t{sim.cpu().item()}\n')
+    try:
+        sim, model = verification(args.model_name,  tsv1_root+'/'+t1_name, tsv2_root+'/'+t2_name, use_gpu=True, checkpoint=args.checkpoint, wav1_start_sr=args.wav1_start_sr, wav2_start_sr=args.wav2_start_sr, wav1_end_sr=args.wav1_end_sr, wav2_end_sr=args.wav2_end_sr, model=model)
+        scores_w.write(f'{t1_name}_{args.wav1_start_sr}_{args.wav1_end_sr}|{t2_name}_{args.wav2_start_sr}_{args.wav2_end_sr}\t{sim.cpu().item()}\n')
+        print(f'{t1_name}_{args.wav1_start_sr}_{args.wav1_end_sr}|{t2_name}_{args.wav2_start_sr}_{args.wav2_end_sr}\t{sim.cpu().item()}')
+        score_list.append(sim.cpu().item())
+    except:
+        pass
     scores_w.flush()
+print(f'avg score: {sum(score_list)/len(score_list)}')
 
