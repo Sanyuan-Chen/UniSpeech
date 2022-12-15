@@ -4,7 +4,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchaudio.transforms as trans
+<<<<<<< HEAD
 #from .utils import UpstreamExpert
+=======
+# from .utils import UpstreamExpert
+>>>>>>> bad74bfd13693d4909cfc4d410bcd9f136a7db95
 
 
 ''' Res2Conv1d + BatchNorm1d + ReLU
