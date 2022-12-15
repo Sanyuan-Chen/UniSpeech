@@ -15,6 +15,7 @@ parser.add_argument('--wav1_start_sr', type=int)
 parser.add_argument('--wav2_start_sr', type=int)
 parser.add_argument('--wav1_end_sr', type=int)
 parser.add_argument('--wav2_end_sr', type=int)
+parser.add_argument('--wav2_cut_wav1', type=bool, default=False)
 args = parser.parse_args()
 
 tsv1 = open(args.tsv1)
@@ -35,7 +36,7 @@ for t1, t2 in tqdm.tqdm(zip(tsv1, tsv2), total=len(tsv1)):
     t1_name = t1.split()[0]
     t2_name = t2.split()[0]
     try:
-        sim, model = verification(args.model_name,  tsv1_root+'/'+t1_name, tsv2_root+'/'+t2_name, use_gpu=True, checkpoint=args.checkpoint, wav1_start_sr=args.wav1_start_sr, wav2_start_sr=args.wav2_start_sr, wav1_end_sr=args.wav1_end_sr, wav2_end_sr=args.wav2_end_sr, model=model)
+        sim, model = verification(args.model_name,  tsv1_root+'/'+t1_name, tsv2_root+'/'+t2_name, use_gpu=True, checkpoint=args.checkpoint, wav1_start_sr=args.wav1_start_sr, wav2_start_sr=args.wav2_start_sr, wav1_end_sr=args.wav1_end_sr, wav2_end_sr=args.wav2_end_sr, model=model, wav2_cut_wav1=args.wav2_cut_wav1)
         scores_w.write(f'{t1_name}_{args.wav1_start_sr}_{args.wav1_end_sr}|{t2_name}_{args.wav2_start_sr}_{args.wav2_end_sr}\t{sim.cpu().item()}\n')
         print(f'{t1_name}_{args.wav1_start_sr}_{args.wav1_end_sr}|{t2_name}_{args.wav2_start_sr}_{args.wav2_end_sr}\t{sim.cpu().item()}')
         score_list.append(sim.cpu().item())

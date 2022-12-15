@@ -33,7 +33,7 @@ def init_model(model_name, checkpoint=None):
     return model
 
 
-def verification(model_name,  wav1, wav2, use_gpu=True, checkpoint=None, wav1_start_sr=0, wav2_start_sr=0, wav1_end_sr=-1, wav2_end_sr=-1, model=None):
+def verification(model_name,  wav1, wav2, use_gpu=True, checkpoint=None, wav1_start_sr=0, wav2_start_sr=0, wav1_end_sr=-1, wav2_end_sr=-1, model=None, wav2_cut_wav1=False):
 
     assert model_name in MODEL_LIST, 'The model_name should be in {}'.format(MODEL_LIST)
     model = init_model(model_name, checkpoint) if model is None else model
@@ -47,9 +47,13 @@ def verification(model_name,  wav1, wav2, use_gpu=True, checkpoint=None, wav1_st
     resample2 = Resample(orig_freq=sr2, new_freq=16000)
     wav1 = resample1(wav1)
     wav2 = resample2(wav2)
-    wav1 = wav1[...,wav1_start_sr:wav1_end_sr if wav1_end_sr > 0 else wav1.shape[-1]]
-    wav2 = wav2[...,wav2_start_sr:wav2_end_sr if wav2_end_sr > 0 else wav2.shape[-1]]
-    print(f'wav1 sr: {wav1.shape}, wav2 sr: {wav2.shape}')
+    print(f'origin wav1 sr: {wav1.shape}, wav2 sr: {wav2.shape}')
+    if wav2_cut_wav1:
+        wav2 = wav2[...,wav1.shape[-1]:]
+    else:
+        wav1 = wav1[...,wav1_start_sr:wav1_end_sr if wav1_end_sr > 0 else wav1.shape[-1]]
+        wav2 = wav2[...,wav2_start_sr:wav2_end_sr if wav2_end_sr > 0 else wav2.shape[-1]]
+    print(f'cutted wav1 sr: {wav1.shape}, wav2 sr: {wav2.shape}')
 
     if use_gpu:
         model = model.cuda()
