@@ -82,7 +82,7 @@ def wavlm_large(refresh=False, *args, **kwargs):
     """
     # Azure Storage
     kwargs["ckpt"] = "\"https://msranlcmtteamdrive.blob.core.windows.net/share/wavlm/WavLM-Large.pt?sv=2020-08-04&st=2021-11-22T10%3A03%3A53Z&se=2022-11-23T10%3A03%3A00Z&sr=b&sp=r&sig=3kB8dwTCyIS8YQ7gW5oXmDrXV%2FAaLmoxBS37oPpFsz4%3D\""
-    kwargs["ckpt"] = "\"https://msranlcmtteamdrive.blob.core.windows.net/share/wavlm/WavLM-Large.pt?sv=2020-08-04&st=2022-11-11T04%3A49%3A54Z&se=2023-11-12T04%3A49%3A00Z&sr=b&sp=r&sig=7jUNrI8FgkE6amYy1ge4Lqj0JhdNUxCCA1KF89YvV8s%3D\""
+    kwargs["ckpt"] = "\"https://valle.blob.core.windows.net/share/wavlm/WavLM-Large.pt?sv=2020-08-04&st=2023-05-09T04%3A59%3A44Z&se=2026-05-10T04%3A59%3A00Z&sr=b&sp=r&sig=q1F4knEqZgCwDbx7MVb6l%2BctfARb1mqNPB7PWGH8v%2Bk%3D\""
 
     # Google Drive
     # kwargs["ckpt"] = "https://drive.google.com/u/1/uc?id=1p8nbj16b7YA16sqPZ4E0JUL-oIDUBGwU&export=download"
